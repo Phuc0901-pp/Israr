@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETL Monitor — Israr Solar Binh Hoa</title>
+  <meta name="description" content="Real-time ETL pipeline monitoring dashboard for Israr Solar project." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components/topbar.css" />
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .flex-icon { display: inline-flex; align-items: center; gap: 6px; }
+    .flex-icon svg { opacity: 0.8; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== TOPBAR ===== -->
+  <header class="topbar" id="topbar">
+    <div class="topbar__brand">
+      <img src="assets/logo.png" alt="Logo" style="height: 38px; width: auto; object-fit: contain; margin-right: 4px;" />
+      <div>
+        <h1 class="topbar__title">ETL MONITOR — ISRAR SOLAR</h1>
+        <p class="topbar__sub">Binh Hoa · Data Pipeline Gateway</p>
+      </div>
+    </div>
+    <div class="topbar__right">
+      <div class="ws-badge" id="ws-badge">
+        <span class="ws-dot" id="ws-dot"></span>
+        <span class="ws-label" id="ws-label">Connecting…</span>
+      </div>
+      <div class="topbar__clock" id="clock"></div>
+    </div>
+  </header>
+
+  <!-- ===== MAIN GRID ===== -->
+  <div class="dashboard-grid">
+
+    <!-- ======= LEFT COLUMN ======= -->
+    <div class="dash-col dash-col--left">
+
+      <!-- KPI CARDS -->
+      <div class="kpi-row" id="kpi-row">
+        <div class="card kpi-card" id="kpi-api">
+          <span class="kpi-label">Trạng thái API</span>
+          <span class="kpi-val" id="val-push-status">—</span>
+          <span class="kpi-sub" id="kpi-api-sub">Chờ phản hồi...</span>
+        </div>
+        <div class="card kpi-card" id="kpi-latency">
+          <span class="kpi-label">Độ Trễ Push</span>
+          <span class="kpi-val"><span id="val-latency">—</span> <small style="font-size:.9rem;color:var(--text-muted)">ms</small></span>
+          <span class="kpi-sub">Thời gian phản hồi</span>
+        </div>
+        <div class="card kpi-card" id="kpi-tags">
+          <span class="kpi-label">Tags / Chu kỳ</span>
+          <span class="kpi-val" id="val-tags-count" style="color:var(--blue)">—</span>
+          <span class="kpi-sub">Số tag đã đóng gói</span>
+        </div>
+        <div class="card kpi-card">
+          <span class="kpi-label">Cập Nhật Lần Cuối</span>
+          <span class="kpi-val" id="val-last-update" style="font-size:1.1rem">—</span>
+          <span class="kpi-sub">Thời điểm nhận gói</span>
+        </div>
+      </div>
+
+      <!-- CHARTS -->
+      <div class="charts-row">
+        <div class="card chart-card">
+          <div class="section-title">
+            <span class="flex-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+              Công Suất Phát (kW)
+            </span>
+            <span class="status-badge idle" id="chart-power-badge"><span class="status-dot"></span>LIVE</span>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="powerChart"></canvas>
+          </div>
+        </div>
+        <div class="card chart-card">
+          <div class="section-title">
+            <span class="flex-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+              Nhiệt Độ & Bức Xạ
+            </span>
+            <span class="status-badge idle" id="chart-env-badge"><span class="status-dot"></span>LIVE</span>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="envChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- METRICS: METERS + SENSORS -->
+      <div class="metrics-row">
+        <!-- METER -->
+        <div class="card">
+          <div class="section-title flex-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Đồng Hồ Tổng
+          </div>
+          <div class="mini-grid">
+            <div class="metric-item" id="mi-p-total">
+              <label>Active Power</label>
+              <span class="val" id="r-p-total">—</span>
+              <span class="unit">kW</span>
+            </div>
+            <div class="metric-item" id="mi-energy-con">
+              <label>Energy Nhận</label>
+              <span class="val" id="r-energy-con">—</span>
+              <span class="unit">kWh</span>
+            </div>
+            <div class="metric-item" id="mi-energy-del">
+              <label>Energy Trả</label>
+              <span class="val" id="r-energy-del">—</span>
+              <span class="unit">kWh</span>
+            </div>
+            <div class="metric-item" id="mi-v-l1l2">
+              <label>Voltage L1-L2</label>
+              <span class="val" id="r-v-l1l2">—</span>
+              <span class="unit">V</span>
+            </div>
+            <div class="metric-item" id="mi-cur-l1">
+              <label>Current L1</label>
+              <span class="val" id="r-cur-l1">—</span>
+              <span class="unit">A</span>
+            </div>
+            <div class="metric-item" id="mi-cur-l2">
+              <label>Current L2</label>
+              <span class="val" id="r-cur-l2">—</span>
+              <span class="unit">A</span>
+            </div>
+            <div class="metric-item" id="mi-cur-l3">
+              <label>Current L3</label>
+              <span class="val" id="r-cur-l3">—</span>
+              <span class="unit">A</span>
+            </div>
+            <div class="metric-item" id="mi-q-total">
+              <label>Reactive Power</label>
+              <span class="val" id="r-q-total">—</span>
+              <span class="unit">kVAr</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SENSORS -->
+        <div class="card">
+          <div class="section-title flex-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+            Trạm Thời Tiết
+          </div>
+          <div class="mini-grid">
+            <div class="metric-item" id="mi-amb1">
+              <label>Nhiệt Độ MT 1</label>
+              <span class="val" id="r-amb1">—</span>
+              <span class="unit">°C</span>
+            </div>
+            <div class="metric-item" id="mi-amb2">
+              <label>Nhiệt Độ MT 2</label>
+              <span class="val" id="r-amb2">—</span>
+              <span class="unit">°C</span>
+            </div>
+            <div class="metric-item" id="mi-panel">
+              <label>Nhiệt Độ Tấm Pin</label>
+              <span class="val" id="r-panel">—</span>
+              <span class="unit">°C</span>
+            </div>
+            <div class="metric-item" id="mi-irr1">
+              <label>Bức Xạ 1</label>
+              <span class="val" id="r-irr1">—</span>
+              <span class="unit">W/m²</span>
+            </div>
+            <div class="metric-item" id="mi-irr2">
+              <label>Bức Xạ 2</label>
+              <span class="val" id="r-irr2">—</span>
+              <span class="unit">W/m²</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCB MATRIX -->
+      <div class="card">
+        <div class="section-title">
+          <span class="flex-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="16" height="10" rx="2" ry="2"/><line x1="22" y1="11" x2="22" y2="13"/></svg>
+            SCB Status Matrix
+          </span>
+          <span id="scb-online-count" style="font-size:0.7rem;color:var(--green);font-weight:600"></span>
+        </div>
+        <div class="scb-overview" id="scb-overview">
+          <span style="color:var(--text-dim);font-size:0.75rem">Chờ tín hiệu SCB…</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ======= RIGHT COLUMN ======= -->
+    <div class="dash-col dash-col--right">
+
+      <!-- ETL PIPELINE -->
+      <div class="card">
+        <div class="section-title flex-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          ETL Pipeline
+        </div>
+        <div class="pipeline">
+          <div class="p-step" id="step-influx">
+            <div class="p-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <div class="p-info">
+              <b>InfluxDB Source</b>
+              <span>meter_data · solar_station</span>
+            </div>
+            <div class="p-badge idle" id="step-influx-badge">IDLE</div>
+          </div>
+          <div class="p-arrow">↓</div>
+          <div class="p-step" id="step-transform">
+            <div class="p-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <div class="p-info">
+              <b>Node-RED Transform</b>
+              <span>Tính toán · Format Tags</span>
+            </div>
+            <div class="p-badge idle" id="step-transform-badge">IDLE</div>
+          </div>
+          <div class="p-arrow">↓</div>
+          <div class="p-step" id="step-push">
+            <div class="p-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1"/></svg>
+            </div>
+            <div class="p-info">
+              <b>Issrar API Push</b>
+              <span>POST /store-dataOfProjects</span>
+            </div>
+            <div class="p-badge idle" id="step-push-badge">IDLE</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PUSH HISTORY -->
+      <div class="card">
+        <div class="section-title">
+          <span class="flex-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+            Lịch sử Push (20 lần)
+          </span>
+          <span id="push-success-rate" style="font-size:0.7rem;font-weight:600;color:var(--green)"></span>
+        </div>
+        <div class="push-history" id="push-history"></div>
+      </div>
+
+      <!-- SYSTEM LOG -->
+      <div class="card">
+        <div class="section-title">
+          <span class="flex-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            System Log
+          </span>
+          <button class="btn-micro" id="btn-clear-log">Clear</button>
+        </div>
+        <div class="log-console" id="log-console">
+          <div class="log-item info">[--:--:--] Đang chờ kết nối tới Gateway...</div>
+        </div>
+      </div>
+
+      <!-- FORMATTED JSON (Compact) -->
+      <div class="card">
+        <div class="section-title">
+          <span class="flex-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Formatted Payload
+          </span>
+          <span id="json-tag-count" style="font-size:0.7rem;font-weight:600;color:var(--blue)">— tags</span>
+        </div>
+        <div class="json-viewer" id="json-viewer">
+          <span style="color:var(--text-dim)">[No data received]</span>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- end .dashboard-grid -->
+
+  <script src="js/websocket.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

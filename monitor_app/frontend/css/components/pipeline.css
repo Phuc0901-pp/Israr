@@ -1,0 +1,35 @@
+/* pipeline.css */
+.pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xs);
+}
+.pipeline__step {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  background: rgba(0,0,0,0.2);
+  padding: var(--sp-sm);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,0.02);
+}
+.p-icon { font-size: 1.2rem; }
+.p-info { flex: 1; }
+.p-info b { font-size: 0.85rem; color: var(--text-primary); }
+.p-info span { font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono); }
+.p-status {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.p-status.success { background: rgba(0,255,136,0.1); color: var(--stat-success); }
+.p-status.error { background: rgba(255,0,85,0.1); color: var(--stat-error); }
+.p-status.idle { background: rgba(139,155,180,0.1); color: var(--text-secondary); }
+
+.p-arrow {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  line-height: 0.5;
+}

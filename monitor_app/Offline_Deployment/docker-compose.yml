@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  monitor-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: israr-etl-monitor
+    ports:
+      - "2700:2700"
+      - "2701:2701"
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Ho_Chi_Minh

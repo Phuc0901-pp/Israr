@@ -1,0 +1,7 @@
+/* clear */
+.json-viewer {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  max-height: 400px;
+  overflow: auto;
+}

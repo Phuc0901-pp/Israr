@@ -1,0 +1,90 @@
+/* topbar.css — Light Enterprise */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--sp-lg);
+  height: 56px;
+  background: var(--bg-header);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar__icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+  border-radius: var(--r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.topbar__title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.topbar__sub {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.5);
+  margin-top: 1px;
+}
+
+.topbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-lg);
+}
+
+/* WS Badge */
+.ws-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+
+.ws-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6B7280;
+}
+.ws-dot.connected {
+  background: #4ADE80;
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.3);
+}
+.ws-dot.disconnected {
+  background: #F87171;
+  box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.3);
+}
+
+.ws-label {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.8);
+  font-weight: 500;
+}
+
+.topbar__clock {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 1px;
+}

@@ -1,0 +1,19 @@
+/* status.css (incorporating push history bar) */
+.push-history {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 40px;
+  padding: 8px;
+  background: rgba(0,0,0,0.2);
+  border-radius: var(--radius-sm);
+}
+.bar {
+  flex: 1;
+  background: var(--text-dim);
+  border-radius: 2px 2px 0 0;
+  transition: height 0.3s ease;
+}
+.bar.ok { background: var(--stat-success); box-shadow: 0 0 5px var(--stat-success); }
+.bar.err { background: var(--stat-error); box-shadow: 0 0 5px var(--stat-error); }
+.bar.idle { height: 2px !important; background: rgba(255,255,255,0.1); }

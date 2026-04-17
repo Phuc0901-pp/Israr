@@ -1,0 +1,67 @@
+/* =========================================================================
+   VARIABLES.CSS — Light Enterprise / Scientific Theme
+   ========================================================================= */
+:root {
+  /* BACKGROUNDS */
+  --bg-base:    #F3F4F6;
+  --bg-surface: #FFFFFF;
+  --bg-header:  #1E3A5F;
+  --bg-hover:   #F9FAFB;
+
+  /* BORDERS */
+  --border:     #E5E7EB;
+  --border-mid: #D1D5DB;
+
+  /* BRAND / ACCENT */
+  --blue:       #2563EB;
+  --blue-light: #EFF6FF;
+  --green:      #16A34A;
+  --green-light:#F0FDF4;
+  --red:        #DC2626;
+  --red-light:  #FEF2F2;
+  --amber:      #D97706;
+  --amber-light:#FFFBEB;
+
+  /* TEXT */
+  --text-h:     #111827;   /* Headings */
+  --text-body:  #374151;   /* Body text */
+  --text-muted: #6B7280;   /* Muted / labels */
+  --text-dim:   #9CA3AF;   /* Very dim */
+  --text-white: #FFFFFF;
+
+  /* ELEVATION */
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:  0 2px 8px rgba(0,0,0,0.08);
+
+  /* TYPOGRAPHY */
+  --font-base:  'Inter', -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', Consolas, monospace;
+
+  /* SPACING */
+  --sp-xs: 4px;  --sp-sm: 8px;
+  --sp-md: 16px; --sp-lg: 24px; --sp-xl: 32px;
+
+  /* RADIUS */
+  --r-sm: 4px; --r-md: 8px; --r-lg: 12px;
+
+  /* TRANSITIONS */
+  --t: all 0.2s ease;
+}
+
+/* ---- BASE ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 14px; }
+
+body {
+  background: var(--bg-base);
+  color: var(--text-body);
+  font-family: var(--font-base);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }

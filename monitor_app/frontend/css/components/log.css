@@ -1,0 +1,22 @@
+/* log.css */
+.terminal-box .log-console {
+  background: rgba(0,0,0,0.4);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-sm);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+}
+.log-item {
+  margin-bottom: 4px;
+  line-height: 1.4;
+  word-break: break-all;
+}
+.log-item.info { color: var(--text-primary); }
+.log-item.warn { color: var(--stat-warn); }
+.log-item.error { color: var(--stat-error); }
+.log-item.success { color: var(--stat-success); }

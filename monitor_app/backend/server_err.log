@@ -1,0 +1,5 @@
+2026/04/17 13:50:38 Frontend Web Server running on http://localhost:2701
+2026/04/17 13:50:38 Backend API Server running on http://localhost:2700
+2026/04/17 13:50:40 [Ingest] Stage=raw len=76
+2026/04/17 13:50:40 [Ingest] Stage=formatted len=65
+2026/04/17 13:50:40 [Ingest] Stage=status len=32
