@@ -24,8 +24,8 @@ Toàn bộ hệ thống hoạt động thông qua một kiến trúc Event-Drive
 ```mermaid
 graph TD
     %% Tác nhân bên ngoài
-    A((Các Trạm \nInverter & Thời tiết)) -->|Điện áp, \n Nhiệt độ| B(InfluxDB / SCADA)
-    B -->|Querying| C{Node-RED \n (Xử lý Data)}
+    A(("Các Trạm \nInverter & Thời tiết")) -->|Điện áp, \n Nhiệt độ| B("InfluxDB / SCADA")
+    B -->|Querying| C{"Node-RED \n (Xử lý Data)"}
     
     %% Tương tác với hệ thống Monitor
     C -->|1. POST Dữ liệu Gốc | D
@@ -33,16 +33,16 @@ graph TD
     C -->|3. POST Trạng thái Push API| D
     
     subgraph BACKEND (Golang - Port 2700)
-    D[API Endpoint \n `/api/ingest`] -->|Phân loại & Bọc gói| E(WebSocket Hub)
+    D["API Endpoint \n /api/ingest"] -->|Phân loại & Bọc gói| E("WebSocket Hub")
     end
     
     subgraph FRONTEND (Web Dashboard - Port 2701)
-    E -->|Broadcast JSON| F[Khối Xử lý UI \n `websocket.js`]
-    F --> G[Render Dom & Đồ thị \n `Chart.js`]
+    E -->|Broadcast JSON| F["Khối Xử lý UI \n websocket.js"]
+    F --> G["Render Dom & Đồ thị \n Chart.js"]
     end
     
     %% API Trung tâm
-    C -.->|Đẩy dữ liệu thật| H((Cloud API \n Issrar App))
+    C -.->|Đẩy dữ liệu thật| H(("Cloud API \n Issrar App"))
     H -.->|Trả về HTTP status| C
     
     classDef sys fill:#1E3A5F,stroke:#fff,stroke-width:2px,color:#fff;
