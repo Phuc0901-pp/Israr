@@ -32,11 +32,11 @@ graph TD
     C -->|2. POST Dữ liệu Chuẩn hóa| D
     C -->|3. POST Trạng thái Push API| D
     
-    subgraph BACKEND (Golang - Port 2700)
+    subgraph BACKEND ["Golang - Port 2700"]
     D["API Endpoint \n /api/ingest"] -->|Phân loại & Bọc gói| E("WebSocket Hub")
     end
     
-    subgraph FRONTEND (Web Dashboard - Port 2701)
+    subgraph FRONTEND ["Web Dashboard - Port 2701"]
     E -->|Broadcast JSON| F["Khối Xử lý UI \n websocket.js"]
     F --> G["Render Dom & Đồ thị \n Chart.js"]
     end
