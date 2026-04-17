@@ -46,7 +46,7 @@ graph TD
     H -.->|Trả về HTTP status| C
     
     classDef sys fill:#1E3A5F,stroke:#fff,stroke-width:2px,color:#fff;
-    classDef ext fill:#F3F4F6,stroke:#D1D5DB,stroke-width:2px;
+    classDef ext fill:#F3F4F6,stroke:#D1D5DB,stroke-width:2px,color:#111827;
     class A,B,C,H ext;
     class D,E,F,G sys;
 ```
